@@ -1,0 +1,7 @@
+name: ExamplePlugin
+main: srshull\example\Main
+version: 1.0.0
+api: 5.0.0
+author: SR.SHULL
+depend:
+  - InvMenuGUI
