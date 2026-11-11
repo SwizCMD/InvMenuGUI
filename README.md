@@ -2,10 +2,15 @@
 
 PocketMine-MP inventory GUI library maintained by **SR.SHULL Dev**.
 
-## 0.2.0-dev.1
-The API now defines logical CHEST (27), DOUBLE_CHEST (54) and HOPPER (5) layouts, typed menu factories, title metadata, transaction callbacks and a send() alias.
+## 0.2.0-dev.1 transport development
+- Typed logical layouts: CHEST (27), DOUBLE_CHEST (54), HOPPER (5).
+- Per-viewer fake block state for chest and hopper.
+- Per-player PocketMine InventoryManager container-open callback integration.
+- PocketMine remains responsible for window IDs, content serialization and item-stack synchronization.
+- Fake block restoration is sent to the viewer when the menu closes.
+- Transaction, open and close callbacks.
 
-**Important:** current transport remains PocketMine's generic inventory window. Fake-block graphics, visible custom titles, explicit container packets, double-chest pairing and protocol-specific synchronization are not implemented. This is not yet a drop-in replacement for Muqsit's InvMenu or production-certified.
+**Important limitations:** DOUBLE_CHEST currently has a 54-slot logical inventory but only a single chest graphic; proper paired chest states and protocol-dependent pairing are not complete. Custom visible titles are not rendered yet. Disconnect/world-change cleanup, chunk-edge behavior, close acknowledgements, simultaneous viewers and client transaction behavior still require runtime testing. This is a development preview, not production-certified and not yet a complete drop-in replacement for Muqsit's InvMenu.
 
 ## Example
 ```php
@@ -17,7 +22,7 @@ $menu->setClickListener(function(GUITransaction $tx) : GUITransactionResult {
 $menu->send($player);
 ``
 
-Requires PHP 8.1+ and PocketMine-MP API 5.x. See docs/API.md, docs/COMPATIBILITY.md and docs/TESTING.md.
+Requires PHP 8.1+ and PocketMine-MP API 5.x. See docs/API.md, docs/TRANSPORT.md and docs/TESTING.md.
 
 [Tuff PMMP Discord](https://discord.gg/FzjNg252ay)
 
