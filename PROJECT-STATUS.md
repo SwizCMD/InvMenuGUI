@@ -1,24 +1,20 @@
 # Project status
 
-**Version:** 0.1.2 — development baseline.
+**Version:** 0.2.0-dev.2 — integrated virtual chest test update.
 
-InvMenuGUI is a global GUI library focused on PocketMine-MP and its API evolution. It is not scoped to a separate server fork.
-
-Implemented in this baseline:
-- Native PMMP inventory lifecycle wrapper
-- Menu sizes 9, 18, 27, 36, 45 and 54
-- Per-player active-menu tracking
-- Open, click and close callbacks
-- Button-menu default that cancels item movement
-- Optional item movement mode
-- Standalone plugin entry point
-- Virion metadata and Composer autoload metadata
-- Build, CI and release workflows
-- Published compatibility policy and official Tuff PMMP Discord link
+Implemented:
+- One-command integrated plugin test: /invmenutest
+- Bundled InvMenuGUI library classes in the standalone plugin PHAR
+- Virtual chest block and block-actor packet transport
+- Per-player container-open callback registration
+- PocketMine-owned window IDs and inventory synchronization
+- Click cancellation for the sample GUI
+- Delayed opening to avoid immediate chat/window transition races
+- Restore of the viewer's real block state after closing
 
 Not production-certified:
-- Fake chest block graphics or client-side custom title rendering
-- Runtime testing on all supported PocketMine-MP builds
-- Automated tests for duplication, disconnect, repeated opens and every click path
+- Bedrock runtime opening must still be verified on the target server fork and protocol.
+- Virtual custom titles are sent as block-actor metadata but client rendering may vary.
+- Double chest and hopper layouts are not part of the single-command test path.
 
-See docs/TESTING.md before using on a production server.
+Target test environment: Altay 5.45.1, Protocol 2225, PHP 8.4.27.
