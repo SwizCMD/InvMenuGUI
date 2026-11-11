@@ -57,6 +57,12 @@ final class Menu implements Listener{
     public function getManager() : GUIManager{ return $this->manager; }
 
     public function open(Player $player) : bool{
+        // Close any previously tracked InvMenuGUI menu first. This ensures its
+        // real-block restoration cannot overwrite the new menu's fake graphic.
+        $previous = $this->manager->getOpenMenu($player);
+        if($previous !== null && $previous !== $this){
+            $previous->close($player);
+        }
         $ev = new InventoryOpenEvent($this->inventory, $player);
         $ev->call();
         if($ev->isCancelled()){ return false; }
