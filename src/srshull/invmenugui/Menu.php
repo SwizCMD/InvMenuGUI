@@ -11,6 +11,7 @@ use pocketmine\event\inventory\InventoryTransactionEvent;
 use pocketmine\inventory\transaction\action\SlotChangeAction;
 use pocketmine\item\Item;
 use pocketmine\player\Player;
+use pocketmine\scheduler\ClosureTask;
 use srshull\invmenugui\transport\VirtualContainerTransport;
 
 final class Menu implements Listener{
@@ -65,7 +66,7 @@ final class Menu implements Listener{
             $previous->close($player);
         }
         $key = $player->getUniqueId()->toString();
-        $token = new \\stdClass();
+        $token = new \stdClass();
         $this->pendingOpens[$key] = $token;
         $this->manager->register($this, $player);
 
