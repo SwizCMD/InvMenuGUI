@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace srshull\\invmenugui;
+namespace srshull\invmenugui;
 
 /**
  * Logical container layouts supported by the public API.
