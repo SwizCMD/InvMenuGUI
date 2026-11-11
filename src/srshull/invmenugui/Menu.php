@@ -62,7 +62,7 @@ final class Menu implements Listener{
         return true;
     }
 
-    #[\\pocketmine\\event\\EventHandler]
+    #[\pocketmine\event\EventHandler]
     public function handleClose(InventoryCloseEvent $event) : void{
         if($event->getInventory() !== $this->inventory){ return; }
         $player = $event->getPlayer();
@@ -70,7 +70,7 @@ final class Menu implements Listener{
         if($this->closeListener !== null){ ($this->closeListener)($player, $this); }
     }
 
-    #[\\pocketmine\\event\\EventHandler]
+    #[\pocketmine\event\EventHandler]
     public function handleTransaction(InventoryTransactionEvent $event) : void{
         $transaction = $event->getTransaction();
         $player = $transaction->getSource();
