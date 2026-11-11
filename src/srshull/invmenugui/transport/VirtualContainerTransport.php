@@ -59,6 +59,7 @@ final class VirtualContainerTransport{
                 MenuType::DOUBLE_CHEST => throw new \LogicException("Double chest handled above")
             };
             self::sendBlock($player, $primary, $block->getStateId());
+            self::sendBlockActorData($player, $primary, $type === MenuType::HOPPER ? "Hopper" : "Chest");
         }
 
         $windowType = $type === MenuType::HOPPER ? WindowTypes::HOPPER : WindowTypes::CONTAINER;
@@ -128,6 +129,29 @@ final class VirtualContainerTransport{
             $translator->internalIdToNetworkId($stateId),
             UpdateBlockPacket::FLAG_NETWORK,
             UpdateBlockPacket::DATA_LAYER_NORMAL
+        ));
+    }
+
+    /**
+     * Sends the block-actor record required by Bedrock to recognize a virtual
+     * block as an openable container. A block state alone is not sufficient:
+     * clients reject ContainerOpen when no matching container block actor exists.
+     */
+    private static function sendBlockActorData(Player $player, Position $position, string $identifier, ?Position $pair = null) : void{
+        $nbt = CompoundTag::create()
+            ->setString("id", $identifier)
+            ->setInt("x", $position->getFloorX())
+            ->setInt("y", $position->getFloorY())
+            ->setInt("z", $position->getFloorZ());
+
+        if($pair !== null){
+            $nbt->setInt("pairx", $pair->getFloorX())
+                ->setInt("pairz", $pair->getFloorZ());
+        }
+
+        $player->getNetworkSession()->sendDataPacket(BlockActorDataPacket::create(
+            BlockPosition::fromVector3($position),
+            new CacheableNbt($nbt)
         ));
     }
 
