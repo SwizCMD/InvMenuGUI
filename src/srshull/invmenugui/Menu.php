@@ -84,7 +84,7 @@ final class Menu implements Listener{
                 }
                 if(!$this->transport->open($player, $this->inventory, $this->type)){
                     $this->manager->unregister($player, $this);
-                    $player->sendMessage("InvMenuGUI: unable to open virtual container (transport initialization failed).");
+                    $this->manager->getPlugin()->getLogger()->warning("Virtual container transport initialization failed for " . $this->type->value . ".");
                     return;
                 }
                 if($this->openListener !== null){
