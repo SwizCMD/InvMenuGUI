@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace srshull\\invmenugui\\transport;
+namespace srshull\invmenugui\transport;
 
 use Closure;
-use pocketmine\\block\\VanillaBlocks;
-use pocketmine\\network\\mcpe\\protocol\\ContainerOpenPacket;
-use pocketmine\\network\\mcpe\\protocol\\UpdateBlockPacket;
-use pocketmine\\network\\mcpe\\protocol\\types\\BlockPosition;
-use pocketmine\\network\\mcpe\\protocol\\types\\inventory\\WindowTypes;
-use pocketmine\\player\\Player;
-use pocketmine\\world\\Position;
-use srshull\\invmenugui\\MenuType;
-use srshull\\invmenugui\\VirtualInventory;
+use pocketmine\block\VanillaBlocks;
+use pocketmine\network\mcpe\protocol\ContainerOpenPacket;
+use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
+use pocketmine\network\mcpe\protocol\types\BlockPosition;
+use pocketmine\network\mcpe\protocol\types\inventory\WindowTypes;
+use pocketmine\player\Player;
+use pocketmine\world\Position;
+use srshull\invmenugui\MenuType;
+use srshull\invmenugui\VirtualInventory;
 
 /**
  * Integrates with the player's existing PocketMine InventoryManager.
@@ -52,7 +52,7 @@ final class VirtualContainerTransport{
         ));
 
         $windowType = $type === MenuType::HOPPER ? WindowTypes::HOPPER : WindowTypes::CONTAINER;
-        $callback = static function(int $windowId, \\pocketmine\\inventory\\Inventory $candidate) use($inventory, $position, $windowType) : ?array{
+        $callback = static function(int $windowId, \pocketmine\inventory\Inventory $candidate) use($inventory, $position, $windowType) : ?array{
             if($candidate !== $inventory){
                 return null;
             }
