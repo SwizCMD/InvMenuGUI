@@ -1,6 +1,14 @@
 name: InvMenuGUI
 main: srshull\invmenugui\plugin\InvMenuGUIPlugin
-version: 0.1.2
+version: 0.2.0-dev.2
 api: 5.0.0
 author: SR.SHULL
-description: Global PocketMine-MP inventory GUI library by SR.SHULL
+description: PocketMine-MP inventory GUI library by SR.SHULL
+commands:
+  invmenutest:
+    description: Opens the InvMenuGUI virtual chest test
+    usage: "/invmenutest"
+    permission: invmenugui.test
+permissions:
+  invmenugui.test:
+    default: op
