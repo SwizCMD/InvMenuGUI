@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace srshull\\invmenuguitest;
+namespace srshull\invmenuguitest;
 
-use pocketmine\\command\\Command;
-use pocketmine\\command\\CommandSender;
-use pocketmine\\item\\VanillaItems;
-use pocketmine\\player\\Player;
-use pocketmine\\plugin\\PluginBase;
-use srshull\\invmenugui\\GUITransaction;
-use srshull\\invmenugui\\GUITransactionResult;
-use srshull\\invmenugui\\InvMenuGUI;
-use srshull\\invmenugui\\MenuType;
+use pocketmine\command\Command;
+use pocketmine\command\CommandSender;
+use pocketmine\item\VanillaItems;
+use pocketmine\player\Player;
+use pocketmine\plugin\PluginBase;
+use srshull\invmenugui\GUITransaction;
+use srshull\invmenugui\GUITransactionResult;
+use srshull\invmenugui\InvMenuGUI;
+use srshull\invmenugui\MenuType;
 
 final class Main extends PluginBase{
 
