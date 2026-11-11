@@ -55,7 +55,7 @@ final class InvMenuGUIPlugin extends PluginBase{
             if(!$menu->open($sender)){
                 $this->getLogger()->warning("InvMenuGUI could not schedule the requested container.");
             }
-        }catch(\\Throwable $e){
+        }catch(\Throwable $e){
             $this->getLogger()->error("InvMenuGUI test failed: " . $e->getMessage());
             $this->getLogger()->logException($e);
         }
