@@ -1,0 +1,14 @@
+name: InvMenuGUITest
+main: srshull\\invmenuguitest\\Main
+version: 0.2.0-dev.1
+api: 5.0.0
+author: SR.SHULL
+description: Runtime test harness for InvMenuGUI 0.2.0-dev.1
+commands:
+  invmenutest:
+    description: Opens an InvMenuGUI test container
+    usage: "/invmenutest [chest|double|hopper]"
+    permission: invmenuguitest.command
+permissions:
+  invmenuguitest.command:
+    default: op
