@@ -1,0 +1,87 @@
+<?php
+
+declare(strict_types=1);
+
+namespace srshull\invmenugui\transport;
+
+use Closure;
+use pocketmine\block\VanillaBlocks;
+use pocketmine\math\Vector3;
+use pocketmine\network\mcpe\protocol\ContainerOpenPacket;
+use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
+use pocketmine\network\mcpe\protocol\types\BlockPosition;
+use pocketmine\network\mcpe\protocol\types\inventory\WindowTypes;
+use pocketmine\network\mcpe\convert\TypeConverter;
+use pocketmine\player\Player;
+use pocketmine\world\Position;
+use srshull\invmenugui\MenuType;
+use srshull\invmenugui\VirtualInventory;
+
+/**
+ * Integrates with the player's existing PocketMine InventoryManager.
+ * This deliberately does not allocate window IDs or send item contents:
+ * InventoryManager remains the sole owner of those responsibilities.
+ */
+final class VirtualContainerTransport{
+
+    /** @var array<string, array{Position, Closure}> */
+    private array $active = [];
+
+    public function open(Player $player, VirtualInventory $inventory, MenuType $type) : bool{
+        $session = $player->getNetworkSession();
+        $inventoryManager = $session->getInvManager();
+        if($inventoryManager === null){
+            return false;
+        }
+
+        $key = $player->getUniqueId()->toString();
+        $this->close($player);
+
+        $direction = $player->getDirectionVector();
+        $base = $player->getPosition()->subtract($direction->x * 2, 0, $direction->z * 2)->floor();
+        $position = new Position($base->x, $base->y, $base->z, $player->getWorld());
+
+        $block = match($type){
+            MenuType::HOPPER => VanillaBlocks::HOPPER(),
+            MenuType::CHEST, MenuType::DOUBLE_CHEST => VanillaBlocks::CHEST()
+        };
+
+        $translator = TypeConverter::getInstance()->getBlockTranslator();
+        $player->getNetworkSession()->sendDataPacket(UpdateBlockPacket::create(
+            BlockPosition::fromVector3($position),
+            $translator->internalIdToNetworkId($block->getStateId()),
+            UpdateBlockPacket::FLAG_NETWORK,
+            UpdateBlockPacket::DATA_LAYER_NORMAL
+        ));
+
+        $windowType = $type === MenuType::HOPPER ? WindowTypes::HOPPER : WindowTypes::CONTAINER;
+        $callback = static function(int $windowId, \pocketmine\inventory\Inventory $candidate) use($inventory, $position, $windowType) : ?array{
+            if($candidate !== $inventory){
+                return null;
+            }
+            return [ContainerOpenPacket::blockInv($windowId, $windowType, BlockPosition::fromVector3($position))];
+        };
+        $inventoryManager->getContainerOpenCallbacks()->add($callback);
+        $this->active[$key] = [$position, $callback];
+
+        if(!$player->setCurrentWindow($inventory)){
+            $this->close($player);
+            return false;
+        }
+        return true;
+    }
+
+    public function close(Player $player) : void{
+        $key = $player->getUniqueId()->toString();
+        $active = $this->active[$key] ?? null;
+        if($active === null){
+            return;
+        }
+        [$position, $callback] = $active;
+        $player->getNetworkSession()->getInvManager()?->getContainerOpenCallbacks()->remove($callback);
+        foreach($player->getWorld()->createBlockUpdatePackets([$position]) as $packet){
+            $player->getNetworkSession()->sendDataPacket($packet);
+        }
+        unset($this->active[$key]);
+    }
+}
