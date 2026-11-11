@@ -1,0 +1,6 @@
+name: InvMenuGUI
+main: srshull\\invmenugui\\plugin\\InvMenuGUIPlugin
+version: 0.1.1
+api: 5.0.0
+author: SR.SHULL
+description: Hybrid virtual inventory GUI framework by SR.SHULL
