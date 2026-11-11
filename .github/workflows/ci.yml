@@ -1,0 +1,26 @@
+name: CI
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: phar
+          coverage: none
+      - name: Composer metadata
+        run: composer validate --no-check-publish
+      - name: PHP syntax
+        run: find src examples -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Build distributions
+        run: php -d phar.readonly=0 tools/build.php
+      - uses: actions/upload-artifact@v4
+        with:
+          name: InvMenuGUI-builds
+          path: build/release/*
