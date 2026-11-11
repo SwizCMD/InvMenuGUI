@@ -1,10 +1,11 @@
 # InvMenuGUI
 
-**Advanced inventory GUI library for PocketMine-MP 5**  
+**Global inventory GUI library for PocketMine-MP**  
 Maintained by **SR.SHULL Dev**.
 
-InvMenuGUI is a PHP library for creating virtual inventory menus on Minecraft Bedrock servers running PocketMine-MP 5. It is distributed in two integration modes:
+InvMenuGUI is a PHP library for creating virtual inventory menus for Minecraft Bedrock servers powered by **PocketMine-MP**. The project follows PocketMine-MP API development and will be maintained across supported PMMP API updates. It is not tied to a separately named fork.
 
+Distributions:
 - **Virion:** shaded into each consumer plugin.
 - **Standalone Phar:** installed once as a shared plugin service.
 
@@ -12,8 +13,12 @@ InvMenuGUI is a PHP library for creating virtual inventory menus on Minecraft Be
 
 ## Requirements
 - PHP 8.1+
-- PocketMine-MP API 5.x
-- Fork compatibility must be verified separately on a live server.
+- PocketMine-MP API 5.x for the current development baseline.
+- Compatibility with each future PMMP API release is assessed and updated as needed; it is not automatic.
+
+## Community
+Official community and project support: **Tuff PMMP Discord**  
+[Join the official Discord server](https://discord.gg/FzjNg252ay)
 
 ## Virion usage
 
@@ -78,13 +83,13 @@ php -d phar.readonly=0 tools/build.php
 ```
 
 ## Validation status
-This is a **development baseline**, not a production-certified release. PHP syntax and packaging checks do not prove runtime compatibility. Test on your exact PMMP/Altay build using [docs/TESTING.md](docs/TESTING.md) before production deployment. Compatibility notes are in [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
+This is a **development baseline**, not a production-certified release. PHP syntax and packaging checks do not prove runtime compatibility. Test on each supported PocketMine-MP build using [docs/TESTING.md](docs/TESTING.md) before production deployment. See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for the compatibility policy.
 
 ## Documentation
 - [Installation](docs/INSTALLATION.md)
 - [API reference](docs/API.md)
 - [Virion vs standalone integration](docs/INTEGRATION.md)
-- [Compatibility](docs/COMPATIBILITY.md)
+- [Compatibility and PMMP update policy](docs/COMPATIBILITY.md)
 - [Build instructions](docs/BUILD.md)
 - [Manual test checklist](docs/TESTING.md)
 - [Release process](docs/RELEASES.md)
