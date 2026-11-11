@@ -1,5 +1,5 @@
 name: InvMenuGUI
-main: srshull\\invmenugui\\plugin\\InvMenuGUIPlugin
+main: srshull\invmenugui\plugin\InvMenuGUIPlugin
 version: 0.2.0-dev.1
 api: 5.0.0
 author: SR.SHULL
