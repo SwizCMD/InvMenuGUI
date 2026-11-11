@@ -45,7 +45,7 @@ final class Main extends PluginBase{
         $menu->setItem(0, VanillaItems::DIAMOND())
             ->setItem(1, VanillaItems::EMERALD())
             ->setItem(2, VanillaItems::GOLD_INGOT())
-            ->setItem($type->getSize() - 1, VanillaItems::BARRIER());
+            ->setItem($type->getSize() - 1, VanillaItems::PAPER());
 
         $menu->setOpenListener(function(Player $player) use($type) : void{
             $player->sendMessage("InvMenuGUI: opened " . $type->value . " (" . $type->getSize() . " slots).");
