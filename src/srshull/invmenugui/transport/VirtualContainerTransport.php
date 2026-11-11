@@ -46,7 +46,7 @@ final class VirtualContainerTransport{
             MenuType::CHEST, MenuType::DOUBLE_CHEST => VanillaBlocks::CHEST()
         };
 
-        $translator = TypeConverter::getInstance()->getBlockTranslator();
+        $translator = $session->getTypeConverter()->getBlockTranslator();
         $player->getNetworkSession()->sendDataPacket(UpdateBlockPacket::create(
             BlockPosition::fromVector3($position),
             $translator->internalIdToNetworkId($block->getStateId()),
