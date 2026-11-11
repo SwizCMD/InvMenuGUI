@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace srshull\invmenugui\plugin;
 
 use pocketmine\plugin\PluginBase;
+use pocketmine\command\Command;
+use pocketmine\command\CommandSender;
+use pocketmine\item\VanillaItems;
+use pocketmine\player\Player;
+use srshull\invmenugui\GUITransaction;
+use srshull\invmenugui\GUITransactionResult;
 use srshull\invmenugui\GUIManager;
 use srshull\invmenugui\InvMenuGUI;
 use srshull\invmenugui\Menu;
