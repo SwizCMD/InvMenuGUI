@@ -55,4 +55,10 @@ foreach(["virion.yml","composer.json","README.md","LICENSE"] as $f){ $zip->addFi
 addDirectoryToZip($zip, $root . "/src", "src/");
 unset($zip);
 
-echo "Built standalone Phar, Virion Phar and Virion source ZIP.\n";
+buildPharFile($release . "/InvMenuGUITest.phar", "InvMenuGUITest", static function(Phar $phar) use($root) : void{
+    $phar->addFile($root . "/examples/InvMenuGUITest/plugin.yml", "plugin.yml");
+    addTree($phar, $root . "/src", "src/");
+    $phar->addFile($root . "/examples/InvMenuGUITest/src/Main.php", "src/srshull/invmenuguitest/Main.php");
+});
+
+echo "Built standalone Phar, Virion Phar, Virion source ZIP and InvMenuGUITest.phar.\\n";
