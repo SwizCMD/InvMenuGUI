@@ -61,4 +61,4 @@ buildPharFile($release . "/InvMenuGUITest.phar", "InvMenuGUITest", static functi
     $phar->addFile($root . "/examples/InvMenuGUITest/src/Main.php", "src/srshull/invmenuguitest/Main.php");
 });
 
-echo "Built standalone Phar, Virion Phar, Virion source ZIP and InvMenuGUITest.phar.\\n";
+echo "Built standalone Phar, Virion Phar, Virion source ZIP and InvMenuGUITest.phar.\n";
