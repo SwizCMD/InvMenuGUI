@@ -7,9 +7,9 @@ namespace srshull\invmenugui;
 /**
  * Logical container layouts supported by the public API.
  *
- * These values describe the intended Bedrock container shape. The current
- * transport still uses PocketMine's generic inventory window and does not
- * yet emulate fake blocks or protocol-specific container graphics.
+ * These values describe the intended Bedrock container shape. CHEST and
+ * HOPPER use one virtual block; DOUBLE_CHEST sends two paired chest blocks.
+ * The client-side appearance still requires runtime validation per protocol.
  */
 enum MenuType : string{
     case CHEST = "chest";
