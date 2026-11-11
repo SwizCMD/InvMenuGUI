@@ -6,7 +6,6 @@ namespace srshull\invmenugui;
 
 use Closure;
 use pocketmine\event\inventory\InventoryCloseEvent;
-use pocketmine\event\inventory\InventoryOpenEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\inventory\InventoryTransactionEvent;
 use pocketmine\inventory\transaction\action\SlotChangeAction;
@@ -63,9 +62,6 @@ final class Menu implements Listener{
         if($previous !== null && $previous !== $this){
             $previous->close($player);
         }
-        $ev = new InventoryOpenEvent($this->inventory, $player);
-        $ev->call();
-        if($ev->isCancelled()){ return false; }
         if(!$this->transport->open($player, $this->inventory, $this->type)){
             return false;
         }
