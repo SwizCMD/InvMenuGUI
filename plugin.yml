@@ -1,6 +1,6 @@
 name: InvMenuGUI
 main: srshull\invmenugui\plugin\InvMenuGUIPlugin
-version: 0.1.1
+version: 0.1.2
 api: 5.0.0
 author: SR.SHULL
-description: Hybrid virtual inventory GUI framework by SR.SHULL
+description: Global PocketMine-MP inventory GUI library by SR.SHULL
