@@ -22,6 +22,8 @@ final class Menu implements Listener{
     private string $title;
     private MenuType $type;
     private VirtualContainerTransport $transport;
+    /** @var array<string, object> Pending delayed-open tokens keyed by player UUID. */
+    private array $pendingOpens = [];
 
     public function __construct(private GUIManager $manager, int|MenuType $layout = 27, string $title = ""){
         $this->type = $layout instanceof MenuType ? $layout : self::typeFromSize($layout);
@@ -62,11 +64,33 @@ final class Menu implements Listener{
         if($previous !== null && $previous !== $this){
             $previous->close($player);
         }
-        if(!$this->transport->open($player, $this->inventory, $this->type)){
-            return false;
-        }
+        $key = $player->getUniqueId()->toString();
+        $token = new \\stdClass();
+        $this->pendingOpens[$key] = $token;
         $this->manager->register($this, $player);
-        if($this->openListener !== null){ ($this->openListener)($player, $this); }
+
+        // Bedrock may reject ContainerOpen if the command/chat screen has not
+        // finished closing yet. Defer the actual transport by two server ticks.
+        $this->manager->getPlugin()->getScheduler()->scheduleDelayedTask(new ClosureTask(
+            function() use($player, $key, $token) : void{
+                if(($this->pendingOpens[$key] ?? null) !== $token){
+                    return;
+                }
+                unset($this->pendingOpens[$key]);
+
+                if(!$player->isConnected() || $this->manager->getOpenMenu($player) !== $this){
+                    return;
+                }
+                if(!$this->transport->open($player, $this->inventory, $this->type)){
+                    $this->manager->unregister($player, $this);
+                    $player->sendMessage("InvMenuGUI: unable to open virtual container (transport initialization failed).");
+                    return;
+                }
+                if($this->openListener !== null){
+                    ($this->openListener)($player, $this);
+                }
+            }
+        ), 2);
         return true;
     }
 
@@ -74,6 +98,12 @@ final class Menu implements Listener{
 
     public function close(Player $player) : bool{
         if($this->manager->getOpenMenu($player) !== $this){ return false; }
+        $key = $player->getUniqueId()->toString();
+        if(isset($this->pendingOpens[$key])){
+            unset($this->pendingOpens[$key]);
+            $this->manager->unregister($player, $this);
+            return true;
+        }
         $player->removeCurrentWindow();
         $this->transport->close($player);
         $this->manager->unregister($player, $this);
