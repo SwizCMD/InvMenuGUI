@@ -4,3 +4,11 @@ version: 0.2.0-dev.1
 api: 5.0.0
 author: SR.SHULL
 description: PocketMine-MP inventory GUI library by SR.SHULL
+commands:
+  invmenutest:
+    description: Opens an InvMenuGUI bundled-library test container
+    usage: "/invmenutest [chest|double|hopper]"
+    permission: invmenugui.test
+permissions:
+  invmenugui.test:
+    default: op
