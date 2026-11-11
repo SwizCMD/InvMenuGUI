@@ -2,25 +2,22 @@
 
 declare(strict_types=1);
 
-namespace srshull\invmenugui\transport;
+namespace srshull\\invmenugui\\transport;
 
 use Closure;
-use pocketmine\block\VanillaBlocks;
-use pocketmine\math\Vector3;
-use pocketmine\network\mcpe\protocol\ContainerOpenPacket;
-use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
-use pocketmine\network\mcpe\protocol\types\BlockPosition;
-use pocketmine\network\mcpe\protocol\types\inventory\WindowTypes;
-use pocketmine\network\mcpe\convert\TypeConverter;
-use pocketmine\player\Player;
-use pocketmine\world\Position;
-use srshull\invmenugui\MenuType;
-use srshull\invmenugui\VirtualInventory;
+use pocketmine\\block\\VanillaBlocks;
+use pocketmine\\network\\mcpe\\protocol\\ContainerOpenPacket;
+use pocketmine\\network\\mcpe\\protocol\\UpdateBlockPacket;
+use pocketmine\\network\\mcpe\\protocol\\types\\BlockPosition;
+use pocketmine\\network\\mcpe\\protocol\\types\\inventory\\WindowTypes;
+use pocketmine\\player\\Player;
+use pocketmine\\world\\Position;
+use srshull\\invmenugui\\MenuType;
+use srshull\\invmenugui\\VirtualInventory;
 
 /**
  * Integrates with the player's existing PocketMine InventoryManager.
- * This deliberately does not allocate window IDs or send item contents:
- * InventoryManager remains the sole owner of those responsibilities.
+ * PocketMine remains the owner of window IDs and inventory synchronization.
  */
 final class VirtualContainerTransport{
 
@@ -47,7 +44,7 @@ final class VirtualContainerTransport{
         };
 
         $translator = $session->getTypeConverter()->getBlockTranslator();
-        $player->getNetworkSession()->sendDataPacket(UpdateBlockPacket::create(
+        $session->sendDataPacket(UpdateBlockPacket::create(
             BlockPosition::fromVector3($position),
             $translator->internalIdToNetworkId($block->getStateId()),
             UpdateBlockPacket::FLAG_NETWORK,
@@ -55,7 +52,7 @@ final class VirtualContainerTransport{
         ));
 
         $windowType = $type === MenuType::HOPPER ? WindowTypes::HOPPER : WindowTypes::CONTAINER;
-        $callback = static function(int $windowId, \pocketmine\inventory\Inventory $candidate) use($inventory, $position, $windowType) : ?array{
+        $callback = static function(int $windowId, \\pocketmine\\inventory\\Inventory $candidate) use($inventory, $position, $windowType) : ?array{
             if($candidate !== $inventory){
                 return null;
             }
@@ -71,17 +68,28 @@ final class VirtualContainerTransport{
         return true;
     }
 
+    /**
+     * Removes the session callback and restores the original block only when
+     * the viewer is still in the world where the fake block was sent.
+     */
     public function close(Player $player) : void{
         $key = $player->getUniqueId()->toString();
         $active = $this->active[$key] ?? null;
         if($active === null){
             return;
         }
+
         [$position, $callback] = $active;
         $player->getNetworkSession()->getInvManager()?->getContainerOpenCallbacks()->remove($callback);
-        foreach($player->getWorld()->createBlockUpdatePackets([$position]) as $packet){
-            $player->getNetworkSession()->sendDataPacket($packet);
+
+        // A world transfer changes the client's dimension. Sending an update
+        // for the old world's coordinates into the new dimension is incorrect.
+        if($player->getWorld() === $position->getWorld()){
+            foreach($position->getWorld()->createBlockUpdatePackets([$position]) as $packet){
+                $player->getNetworkSession()->sendDataPacket($packet);
+            }
         }
+
         unset($this->active[$key]);
     }
 }
