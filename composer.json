@@ -1,6 +1,6 @@
 {
   "name": "srshull/invmenugui",
-  "description": "Hybrid virtual inventory GUI framework for PocketMine-MP 5",
+  "description": "Global PocketMine-MP inventory GUI library",
   "type": "library",
   "license": "MIT",
   "require": {
