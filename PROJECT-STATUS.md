@@ -1,6 +1,8 @@
 # Project status
 
-**Version:** 0.1.1 — development baseline.
+**Version:** 0.1.2 — development baseline.
+
+InvMenuGUI is a global GUI library focused on PocketMine-MP and its API evolution. It is not scoped to a separate server fork.
 
 Implemented in this baseline:
 - Native PMMP inventory lifecycle wrapper
@@ -12,11 +14,11 @@ Implemented in this baseline:
 - Standalone plugin entry point
 - Virion metadata and Composer autoload metadata
 - Build, CI and release workflows
+- Published compatibility policy and official Tuff PMMP Discord link
 
 Not production-certified:
 - Fake chest block graphics or client-side custom title rendering
-- Runtime testing on PMMP and Altay
-- Fork/protocol-specific behavior
+- Runtime testing on all supported PocketMine-MP builds
 - Automated tests for duplication, disconnect, repeated opens and every click path
 
 See docs/TESTING.md before using on a production server.
